@@ -33,5 +33,15 @@ class CustomUser(AbstractBaseUser):
     USERNAME_FIELD = 'email'  # Can still use email as the default login field
     REQUIRED_FIELDS = []  # No other required fields (we'll handle this in the manager)
 
+    def has_perm(self, perm, obj=None):
+        # Admin users have all permissions
+        if self.user_type == 'admin':
+            return True
+
+    def has_module_perms(self, app_label):
+        # Admins can view all apps
+        if self.user_type == 'admin':
+            return True
+
     def __str__(self):
         return self.email or self.phone_number  # Display either email or phone number
